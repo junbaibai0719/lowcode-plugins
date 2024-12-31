@@ -98,7 +98,12 @@ function createFunctionCode(functionName: string, functionNode: Method) {
       functionCode = functionCode.replace(/function/, '');
     } else {
       // 兼容历史数据
-      functionCode = functionNode.value?.replace(/function/, functionName);
+      // 如果函数名称已经包含在函数定义中,需要移除重复的函数名
+      if (functionNode.value?.includes(`function ${functionName}`)) {
+        functionCode = functionNode.value?.replace(`function ${functionName}`, functionName);
+      } else {
+        functionCode = functionNode.value?.replace(/function/, functionName);
+      }
     }
     return functionCode;
   }
